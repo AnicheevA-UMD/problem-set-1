@@ -91,7 +91,7 @@ def extract_transit_data() -> Path:
 
 
 # -------------------------
-# Optional: local test hook
+# Local test hook
 # -------------------------
 
 if __name__ == "__main__":

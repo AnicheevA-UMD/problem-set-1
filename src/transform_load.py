@@ -27,8 +27,6 @@ TRANSIT_INPUT_CSV = DATA_DIR / "transit_raw.csv"
 LINE_PLOT_PATH = DATA_DIR / "eda_line_ridership_vs_avgtemp.png"
 SCATTER_PLOT_PATH = DATA_DIR / "eda_scatter_feb2025_ridership_vs_precip.png"
 HEATMAP_PATH = DATA_DIR / "eda_corr_heatmap.png"
-
-# Write the merged dataset now so it can be used for EDA (and for later steps)
 MERGED_OUTPUT_CSV = DATA_DIR / "weather_transit_merged.csv"
 
 
@@ -101,8 +99,6 @@ def transform_merge_and_load() -> Path:
     # Add unique row ID (required output data standard)
     merged_df = merged_df.reset_index(drop=True)
     merged_df.insert(0, "row_id", merged_df.index + 1)
-
-    # Write merged CSV so it can be used for EDA (and later load requirements)
     DATA_DIR.mkdir(parents=True, exist_ok=True)
     merged_df.to_csv(MERGED_OUTPUT_CSV, index=False)
     print(f"Merged CSV written to: {MERGED_OUTPUT_CSV}")
@@ -111,6 +107,7 @@ def transform_merge_and_load() -> Path:
     # EDA: Line plot of daily ridership and daily average temperature
     # (using known column names)
     # ------------------------------------------------------------
+
     ridership_col = "total_rides"
     temp_col = "temp"
 
@@ -149,6 +146,7 @@ def transform_merge_and_load() -> Path:
     # ------------------------------------------------------------
     # EDA: February 2025 scatterplot (ridership vs precipitation)
     # ------------------------------------------------------------
+
     precip_col = "precip"
 
     merged_df[precip_col] = pd.to_numeric(merged_df[precip_col], errors="coerce")
@@ -176,6 +174,7 @@ def transform_merge_and_load() -> Path:
     # ------------------------------------------------------------
     # EDA: Correlation heatmap of all numeric features (merged data)
     # ------------------------------------------------------------
+
     numeric_df = merged_df.select_dtypes(include="number").copy()
     corr = numeric_df.corr(numeric_only=True)
 
@@ -187,9 +186,11 @@ def transform_merge_and_load() -> Path:
     plt.close(fig)
 
     print(f"Saved correlation heatmap to: {HEATMAP_PATH}\n")
+
     # ------------------------------------------------------------
-    # Summary: write your own analysis here (print statement)
+    # Summary
     # ------------------------------------------------------------
+    
     print("Notes on Trends")
     print(
     "There is a low-to-moderate positive correlation between the number of warmer days and warmer weather and number of public transit rides.\n"
