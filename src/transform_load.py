@@ -208,4 +208,3 @@ def transform_merge_and_load() -> Path:
     )
     
     return MERGED_OUTPUT_CSV
-transform_merge_and_load()
